@@ -70,6 +70,19 @@ class Configuration implements ConfigurationInterface
                             ->prototype('variable')->end()
                         ->end()
                         ->scalarNode('to')->end()
+                        ->variableNode('guard')
+                        ->defaultNull()
+                        ->validate()
+                        ->always(function($v) {
+                            if ( is_null($v['guard'])
+                                || (is_array($v['guard']) && count($v['guard']) < 3 && count($v['guard']) > 0)
+                                || is_string($v['guard'])) {
+                                return $v;
+                            }
+                            throw new InvalidTypeException();
+                        })
+                        ->end()
+                        ->end()
                     ->end()
                 ->end()
             ->end();
